@@ -11,13 +11,22 @@ export const MainLayoutAuth = ({
   children,
   className = "",
 }: MainLayoutAuthProps) => {
+  const mql = window.matchMedia("(width <= 600px)");
+  console.log(mql);
   return (
     <div
       className={`min-h-screen  flex flex-col items-center  p-4 ${className}`}
     >
       <h1 className="font-codec w-full text-white uppercase text-2xl md:text-3xl lg:text-4xl xl:text-5xl lg:mt-10">
-        Единое школьное
-        <br /> информационное пространство
+        {!mql.matches ? (
+          <>
+            Единое школьное
+            <br /> информационное пространство
+          </>
+        ) : (
+          <>ЕШИП</>
+        )}
+        <br /> школа 1298 «профиль куркино»
       </h1>
       <Separator className="my-1 bg-sch-green-light lg:hidden " />
       <div className="w-full max-w-md mt-5 lg:mt-40">{children}</div>

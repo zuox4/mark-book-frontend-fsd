@@ -56,7 +56,7 @@ const LoginForm = () => {
   if (isAuthenticated) return <Navigate to={"/"} />;
   return (
     <>
-      <Card className="w-full max-w-md shadow-none lg:bg-sch-blue-ultra/10  text-white border-0 font-news">
+      <Card className="w-full max-w-md shadow-none lg:bg-sch-blue-ultra/50  text-white border-0 font-news">
         <CardHeader>
           <CardTitle className="text-center uppercase text-xl">
             Войти в аккаунт
