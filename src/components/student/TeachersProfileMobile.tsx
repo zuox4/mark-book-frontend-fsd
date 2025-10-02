@@ -13,9 +13,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
-import TeacherProfile from "./TeacherProfile";
-
-const TeachersProfileMobile = () => {
+interface TeachersProfileMobileProps {
+  teachers: React.ReactNode[];
+}
+const TeachersProfileMobile = ({ teachers }: TeachersProfileMobileProps) => {
   return (
     <Dialog>
       {/* Блюр для всего заднего фона */}
@@ -53,16 +54,11 @@ const TeachersProfileMobile = () => {
           <div className="lg:hidden py-6 px-4">
             <Carousel className="w-full max-w-sm mx-auto">
               <CarouselContent>
-                <CarouselItem key={1} className="">
-                  <div className="px-2">
-                    <TeacherProfile />
-                  </div>
-                </CarouselItem>
-                <CarouselItem key={2}>
-                  <div className="px-2">
-                    <TeacherProfile />
-                  </div>
-                </CarouselItem>
+                {teachers.map((teacher) => (
+                  <CarouselItem key={1} className="">
+                    <div className="px-2">{teacher}</div>
+                  </CarouselItem>
+                ))}
               </CarouselContent>
               <div className="flex justify-center gap-6 mt-6">
                 <CarouselPrevious className="static translate-x-0 translate-y-0 size-12 bg-white/80 backdrop-blur-sm border-2  transition-all" />

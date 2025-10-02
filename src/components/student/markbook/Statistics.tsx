@@ -23,8 +23,8 @@ function Statistics({ marks }: StatisticsProps) {
   return (
     <div className="grid grid-cols-1  md:grid-cols-4 gap-4 mb-8">
       {/* Всего мероприятий */}
-      <div className="bg-white/10  rounded-xl p-1 items-center md:p-4 border border-gray-200/30 backdrop-blur-sm lg:block">
-        <div className="text-center md:block flex justify-between items-center">
+      <div className="bg-white/10  rounded-xl p-1 items-center md:p-4 border border-gray-200/30 backdrop-blur-sm lg:block pr-2 md:pr-0">
+        <div className="text-center md:block grid grid-cols-[1fr_3fr_1fr] items-center">
           <div className="flex justify-center items-center md:mb-2">
             <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
               <svg
@@ -51,7 +51,8 @@ function Statistics({ marks }: StatisticsProps) {
 
       {/* Зачеты */}
       <div className="bg-white/10  rounded-xl p-1 items-center md:p-4 border border-gray-200/30 backdrop-blur-sm lg:block pr-2 md:pr-0">
-        <div className="text-center  md:block flex justify-between items-center">
+        <div className="text-center md:block grid grid-cols-[1fr_3fr_1fr] items-center">
+          {" "}
           <div className="flex justify-center items-center md:mb-2">
             <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
               <svg
@@ -81,7 +82,8 @@ function Statistics({ marks }: StatisticsProps) {
 
       {/* Незачеты */}
       <div className="bg-white/10  rounded-xl p-1 items-center md:p-4 border border-gray-200/30 backdrop-blur-sm lg:block pr-2 md:pr-0">
-        <div className="text-center  md:block flex justify-between items-center">
+        <div className="text-center md:block grid grid-cols-[1fr_3fr_1fr] items-center">
+          {" "}
           <div className="flex justify-center items-center lg:mb-2">
             <div className="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center">
               <svg
@@ -109,7 +111,8 @@ function Statistics({ marks }: StatisticsProps) {
 
       {/* Успеваемость */}
       <div className="bg-white/10  rounded-xl p-1 items-center md:p-4 border border-gray-200/30 backdrop-blur-sm lg:block pr-2 md:pr-0">
-        <div className="text-center  md:block flex justify-between items-center">
+        <div className="text-center md:block grid grid-cols-[1fr_3fr_1fr] items-center">
+          {" "}
           <div className="flex justify-center items-center md:mb-2">
             <div className="w-10 h-10 bg-sch-green-light/20 rounded-full flex items-center justify-center">
               <svg
