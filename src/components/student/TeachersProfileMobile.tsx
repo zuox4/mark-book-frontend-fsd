@@ -21,7 +21,7 @@ const TeachersProfileMobile = () => {
       {/* Блюр для всего заднего фона */}
       <DialogOverlay className="backdrop-blur-xs bg-amber-50/10 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
 
-      <DialogTrigger className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-sch-green-light/10 to-sch-green-light/5 border border-sch-green-light/30 rounded-2xl hover:from-sch-green-light/15 hover:to-sch-green-light/10 transition-all duration-300 group shadow-sm hover:shadow-md">
+      <DialogTrigger className="flex items-center w-full gap-3 px-4 py-3 bg-gradient-to-r from-sch-green-light/10 to-sch-green-light/5 border border-sch-green-light/30 rounded-2xl hover:from-sch-green-light/15 hover:to-sch-green-light/10 transition-all duration-300 group shadow-sm hover:shadow-md">
         <div className="flex -space-x-3">
           <Avatar className="w-10 h-10 border-2 border-white shadow-md group-hover:scale-105 transition-transform">
             <AvatarImage src="https://github.com/leerob.png" alt="@leerob" />
@@ -39,7 +39,7 @@ const TeachersProfileMobile = () => {
             </AvatarFallback>
           </Avatar>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full justify-between">
           <span className="font-codec-bold text-sm text-gray-400">
             Преподаватели проекта
           </span>

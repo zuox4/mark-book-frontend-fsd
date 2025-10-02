@@ -1,6 +1,8 @@
 import photo from "../../app/assets/imageMedia.svg";
+
 import TeacherProfile from "./TeacherProfile";
 import TeachersProfileMobile from "./TeachersProfileMobile";
+import MarkBookButton from "./MarkBookButton";
 
 const ProjectDashBoard = () => {
   return (
@@ -8,13 +10,17 @@ const ProjectDashBoard = () => {
       {/* Название и фото проектного оффиса */}
       <div className="flex flex-col lg:flex-col gap-6 lg:gap-8">
         {/* Блок с фото - всегда сверху */}
-        <div className="w-full flex">
+        <div className="w-full flex justify-between">
           <div className="w-full max-w-xs lg:max-w-full lg:w-1/4">
             <img
               src={photo}
               alt="Инженерный класс"
               className="w-full h-auto rounded-2xl lg:rounded-3xl"
             />
+          </div>
+          {/* Кнопка открыть зачетную книжку */}
+          <div className="hidden lg:block">
+            <MarkBookButton />
           </div>
         </div>
 
@@ -29,8 +35,9 @@ const ProjectDashBoard = () => {
               </span>
               <br className="" /> в Инженерный класс в московской школе
             </h1>
-            <div className="lg:hidden">
+            <div className="lg:hidden gap-3 flex flex-col">
               <TeachersProfileMobile />
+              <MarkBookButton />
             </div>
 
             {/* Белый текст описания */}

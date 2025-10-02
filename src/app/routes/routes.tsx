@@ -4,12 +4,13 @@ import AuthPage from "@/pages/auth/AuthPage";
 import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
 import WelcomePage from "@/pages/auth/WelcomePage";
 import EventsPage from "@/pages/student/events/eventsPage";
+import MarkBookPage from "@/pages/student/mark-book/markBookPage";
 import ProjectOfficePage from "@/pages/student/project-office/projectOfficePage";
 import Student from "@/pages/student/student";
 import TeacherPage from "@/pages/teacher/TeacherPage";
 import { createBrowserRouter } from "react-router-dom";
 
-const routes = {
+export const routes = {
   main: { title: "Главная", path: "/" },
   login: { title: "Авторизация", path: "/login" },
   register: { title: "Регистрация", path: "/registration" },
@@ -23,6 +24,11 @@ const routes = {
     children: {
       main: { title: "Проектный офис", path: "/student1" },
       events: { title: "Мероприятия ученика", path: "/student1/events" },
+      markBook: {
+        title: "Зачетная книжка",
+        path: "/student1/:id/markBook",
+        getPath: (id: string) => `/student1/${id}/markBook`,
+      },
     },
   },
 };
@@ -75,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: "events",
         element: <EventsPage />,
+      },
+      {
+        path: routes.student.children.markBook.path,
+        element: <MarkBookPage />,
       },
     ],
   },

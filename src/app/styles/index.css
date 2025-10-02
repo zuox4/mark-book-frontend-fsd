@@ -25,3 +25,29 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #ffffff;
   border: 1px solid #1a6310; /* или ваш цвет бордера */
 }
+
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px); /* Идеальная равномерная высота */
+  }
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
