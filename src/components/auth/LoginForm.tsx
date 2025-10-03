@@ -43,10 +43,9 @@ const LoginForm = () => {
       setErrors(newErrors);
       return;
     }
-
     try {
       await login(loginData.email, loginData.password);
-      // Если логин успешен - перенаправляем на главную
+      navigate("/welcome");
     } catch (error) {
       console.log("Ошибка авторизации:", error);
       // Ошибка уже обработана в store, здесь можно добавить дополнительную логику
