@@ -1,90 +1,70 @@
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-import { RoleBasedRedirect } from "@/components/auth/RoleBasedRedirect";
+
+import WelcomeRedirect from "@/components/auth/WelcomRedirect";
 import AuthPage from "@/pages/auth/AuthPage";
 import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
-import WelcomePage from "@/pages/auth/WelcomePage";
+
 import EventsPage from "@/pages/student/events/eventsPage";
 import MarkBookPage from "@/pages/student/mark-book/markBookPage";
 import ProjectOfficePage from "@/pages/student/project-office/projectOfficePage";
-import Student from "@/pages/student/student";
+import StudentPage from "@/pages/student/student-page";
 import TeacherPage from "@/pages/teacher/TeacherPage";
-import { createBrowserRouter } from "react-router-dom";
-
-export const routes = {
-  main: { title: "Главная", path: "/" },
-  login: { title: "Авторизация", path: "/login" },
-  register: { title: "Регистрация", path: "/registration" },
-  verify: { title: "Страница верификации", path: "/verify-email" },
-  welcome: { title: "Добро пожаловать", path: "/welcome" },
-  test: { title: "Тест", path: "/test" },
-  teacher: { title: "Преподаватель", path: "/teacher" },
-  student: {
-    title: "Приложение ученика",
-    path: "/student1",
-    children: {
-      main: { title: "Проектный офис", path: "/student1" },
-      events: { title: "Мероприятия ученика", path: "/student1/events" },
-      markBook: {
-        title: "Зачетная книжка",
-        path: "/student1/:id/markBook",
-        getPath: (id: string) => `/student1/${id}/markBook`,
-      },
-    },
-  },
-};
+import { createBrowserRouter, Outlet } from "react-router-dom";
 
 export const router = createBrowserRouter([
   {
-    path: routes.main.path,
-    element: (
-      <ProtectedRoute>
-        <RoleBasedRedirect />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: routes.login.path,
+    path: "/login",
     element: <AuthPage />,
   },
   {
-    path: routes.register.path,
+    path: "/registration",
     element: <AuthPage />,
   },
   {
-    path: routes.verify.path,
+    path: "/verify-email",
     element: <VerifyEmailPage />,
   },
   {
-    path: routes.teacher.path,
-    element: <TeacherPage />,
-  },
-  {
-    path: routes.welcome.path,
+    path: "/",
     element: (
       <ProtectedRoute>
-        <WelcomePage />
+        <Outlet />
       </ProtectedRoute>
     ),
-  },
-  {
-    path: routes.test.path,
-    element: <WelcomePage />,
-  },
-  {
-    path: routes.student.path,
-    element: <Student />,
     children: [
       {
         index: true,
-        element: <ProjectOfficePage />,
+        element: <WelcomeRedirect />, // Комбинированный компонент
       },
       {
-        path: "events",
-        element: <EventsPage />,
+        path: "teacher",
+        element: (
+          <ProtectedRoute requiredRole="teacher">
+            <TeacherPage />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: routes.student.children.markBook.path,
-        element: <MarkBookPage />,
+        path: "student",
+        element: (
+          <ProtectedRoute requiredRole="student">
+            <StudentPage />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            index: true, // Это сработает для /student
+            element: <ProjectOfficePage />,
+          },
+          {
+            path: "events", // Это сработает для /student/events
+            element: <EventsPage />,
+          },
+          {
+            path: ":id/markBook", // Это сработает для /student/123/markBook
+            element: <MarkBookPage />,
+          },
+        ],
       },
     ],
   },

@@ -1,24 +1,21 @@
-// components/RoleBasedRedirect.tsx
-import { useAuth } from "@/hooks/auth";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// components/auth/RoleBasedRedirect.tsx
+import { useAuthStore } from "@/stores/useAuthStore";
+import { Navigate } from "react-router-dom";
 
-export const RoleBasedRedirect = () => {
-  const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+export const RoleBasedRedirect: React.FC = () => {
+  const { user, isAuthenticated } = useAuthStore();
 
-  useEffect(() => {
-    console.log(user);
-    if (isAuthenticated && user) {
-      if (user.roles?.includes("teacher")) {
-        navigate("/teacher");
-      } else if (user.roles?.includes("student")) {
-        navigate("/student");
-      } else {
-        navigate("/");
-      }
-    }
-  }, [user, isAuthenticated, navigate]);
+  console.log("RoleBasedRedirect:", { isAuthenticated, user });
 
-  return null; // Этот компонент ничего не рендерит
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user?.roles?.includes("teacher")) {
+    return <Navigate to="/teacher" replace />;
+  } else if (user?.roles?.includes("student")) {
+    return <Navigate to="/student" replace />;
+  } else {
+    return <Navigate to="/welcome" replace />;
+  }
 };

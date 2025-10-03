@@ -1,42 +1,32 @@
-// components/ProtectedRoute.tsx
 import { useAuthStore } from "@/stores/useAuthStore";
-import { ReactNode, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
-  children: ReactNode;
-  fallbackPath?: string;
+  children: React.ReactNode;
+  requiredRole?: "student" | "teacher";
 }
 
-export const ProtectedRoute = ({
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  fallbackPath = "/login",
-}: ProtectedRouteProps) => {
-  const { isAuthenticated, isLoading, token, checkAuth } = useAuthStore();
-  const [authChecked, setAuthChecked] = useState(false);
-
-  useEffect(() => {
-    // Если есть токен, но isAuthenticated еще false - проверяем
-    if (token && !isAuthenticated && !isLoading) {
-      checkAuth().finally(() => {
-        setAuthChecked(true);
-      });
-    } else {
-      setAuthChecked(true);
-    }
-  }, [token, isAuthenticated, isLoading, checkAuth]);
-
-  // Ждем пока проверим авторизацию
-  if (!authChecked || (token && isLoading)) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  requiredRole,
+}) => {
+  const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to={fallbackPath} replace />;
+    return <Navigate to="/login" replace />;
+  }
+
+  // Если указана требуемая роль, проверяем её
+  if (requiredRole && user?.roles?.includes(requiredRole)) {
+    // Редирект на страницу, соответствующую роли пользователя
+    if (user?.roles.includes("teacher")) {
+      return <Navigate to="teacher" replace />;
+    }
+    if (user?.roles.includes("student")) {
+      return <Navigate to="student" replace />;
+    } else {
+      return <Navigate to={"/login"} />;
+    }
   }
 
   return <>{children}</>;
