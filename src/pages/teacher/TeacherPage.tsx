@@ -1,3 +1,4 @@
+import Header from "@/components/owner/header/Header";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/auth";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,7 @@ const TeacherPage = () => {
 
   return (
     <div className="min-h-screen">
+      <Header />
       <Button onClick={handleLogOut}>Выйти</Button>
     </div>
   );

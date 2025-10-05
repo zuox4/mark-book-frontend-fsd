@@ -1,11 +1,10 @@
-import { routes } from "@/app/routes/routes";
 import { BookMarked, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const MarkBookButton = () => {
   const navigate = useNavigate();
   const navToMarkBook = () => {
-    navigate(routes.student.children.markBook.getPath("sdcsc"));
+    navigate("/student/markBook");
   };
   return (
     <div

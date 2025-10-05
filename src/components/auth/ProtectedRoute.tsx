@@ -1,3 +1,4 @@
+import { useUserData } from "@/hooks/user/useUserData";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -8,15 +9,19 @@ interface ProtectedRouteProps {
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredRole,
 }) => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, isLoading, logout } = useAuthStore();
+  const { error } = useUserData(user?.id);
+
+  if (error) {
+    logout();
+  }
+  if (isLoading) return <div>Загрузка...</div>;
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  // Если указана требуемая роль, проверяем что у пользователя она ЕСТЬ
   if (requiredRole && !user?.roles?.includes(requiredRole)) {
-    // Редирект на страницу, соответствующую роли пользователя
     if (user?.roles?.includes("teacher")) {
       return <Navigate to="/teacher" replace />;
     }
@@ -24,12 +29,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/student" replace />;
     }
     // Если роль не определена, редирект на welcome
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/welcome" replace />;
   }
 
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 };

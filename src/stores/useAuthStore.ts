@@ -1,11 +1,10 @@
 // stores/useAuthStore.ts
-import axios from "axios";
+import privateApi from "@/services/api/api";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
 export interface User {
-  id: string;
+  id: number;
   email: string;
   display_name: string;
   roles?: string[];
@@ -22,24 +21,16 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  checkAuth: () => Promise<void>;
+
   clearError: () => void;
   isVerifying: boolean;
   verifyError: string | null;
   verifyEmail: (token: string) => Promise<void>;
 }
 
-const API_BASE_URL = "http://127.0.0.1:8080/api";
-
-const authApi = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000, // Увеличил таймаут
-});
-
-// Убрал интерцептор, так как токен будет браться из store
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       token: null,
       isAuthenticated: false,
@@ -51,7 +42,9 @@ export const useAuthStore = create<AuthState>()(
       verifyEmail: async (token: string) => {
         set({ isVerifying: true, verifyError: null });
         try {
-          const response = await authApi.post("/auth/verify-email", { token });
+          const response = await privateApi.post("/auth/verify-email", {
+            token,
+          });
           console.log(response.data);
           set({
             isVerifying: false,
@@ -77,7 +70,7 @@ export const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await authApi.post("/auth/login", {
+          const response = await privateApi.post("/auth/login", {
             email,
             password,
           });
@@ -106,7 +99,7 @@ export const useAuthStore = create<AuthState>()(
       register: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await authApi.post("/auth/register", {
+          const response = await privateApi.post("/auth/register", {
             email,
             password,
           });
@@ -143,34 +136,6 @@ export const useAuthStore = create<AuthState>()(
         toast.info("Logged out successfully");
       },
 
-      checkAuth: async () => {
-        const { token } = get();
-        if (!token) {
-          set({ isAuthenticated: false });
-          return;
-        }
-
-        set({ isLoading: true });
-        try {
-          // Используем токен из store
-          const response = await authApi.get("/auth/me", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const user = response.data;
-
-          set({
-            user,
-            isAuthenticated: true,
-            isLoading: false,
-          });
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-          console.error("Auth check failed:", error);
-          // При ошибке авторизации очищаем store
-          get().logout();
-        }
-      },
-
       clearError: () => set({ error: null }),
     }),
     {
@@ -179,7 +144,15 @@ export const useAuthStore = create<AuthState>()(
         token: state.token,
         user: state.user,
       }),
-      // Добавьте настройки для надежного сохранения
+      onRehydrateStorage: () => (state) => {
+        // Вызывается когда данные восстановлены из storage
+        if (state) {
+          state.isLoading = false;
+          // Также можно обновить isAuthenticated на основе токена
+          state.isAuthenticated = !!state.token;
+        }
+      },
+
       version: 1,
     }
   )

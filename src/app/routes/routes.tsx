@@ -1,25 +1,30 @@
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-
 import AuthPage from "@/pages/auth/AuthPage";
 import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
 import WelcomeRedirect from "@/pages/auth/WelcomRedirect";
-
+import StudentPage from "@/pages/student/student-page";
 import TeacherPage from "@/pages/teacher/TeacherPage";
-import { createBrowserRouter, Outlet } from "react-router-dom";
+
+import MarkBookPage from "@/pages/student/mark-book/markBookPage";
+import ProjectOfficePage from "@/pages/student/project-office/project-office-page";
+import { createBrowserRouter } from "react-router-dom";
+import TanStackQueryClientProvider from "../providers/query-client-provider";
 
 export const router = createBrowserRouter([
   {
-    element: <Outlet />,
+    path: "/",
+    element: (
+      <TanStackQueryClientProvider>
+        <ProtectedRoute />
+      </TanStackQueryClientProvider>
+    ), // Общий защищенный маршрут
     children: [
-      {
-        index: true, // Редирект с / на welcome
-        element: <ProtectedRoute />,
-      },
       {
         path: "teacher",
         element: <ProtectedRoute requiredRole="teacher" />,
         children: [
           {
+            index: true,
             element: <TeacherPage />,
           },
         ],
@@ -27,10 +32,24 @@ export const router = createBrowserRouter([
       {
         path: "student",
         element: <ProtectedRoute requiredRole="student" />,
+        children: [
+          {
+            element: <StudentPage />,
+            children: [
+              {
+                path: "",
+                element: <ProjectOfficePage />,
+              },
+              {
+                path: "markBook",
+                element: <MarkBookPage />,
+              },
+            ],
+          },
+        ],
       },
     ],
   },
-
   {
     path: "/login",
     element: <AuthPage />,

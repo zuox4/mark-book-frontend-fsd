@@ -106,7 +106,7 @@ function MarkBookPage() {
   return (
     <div className="min-h-screen w-full">
       <div className="flex flex-col">
-        <BackButton path="/student1" title="К проектному оффису" />
+        <BackButton path="/student" title="К проектному оффису" />
         <PageHeader
           projectTitle="Инженерный класс в Московской школе"
           displayName="Найдюк Кирилл Константинович"
