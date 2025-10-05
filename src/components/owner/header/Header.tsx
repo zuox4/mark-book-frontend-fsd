@@ -7,12 +7,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/auth";
+import { useStudentData } from "@/hooks/student/useStudentData";
 import { useUserData } from "@/hooks/user/useUserData";
 
 const Header = () => {
   const { user } = useAuth();
   const { data: userData, isLoading, isError } = useUserData(user?.id);
   const { logout } = useAuth();
+  const { data } = useStudentData();
+
   // Если данные загружаются или произошла ошибка, показываем упрощенный header
   if (isLoading) {
     return <SkeletonHeader />;
@@ -83,11 +86,16 @@ const Header = () => {
                 {email}
               </p>
               <p className=" font-codec-news px-2 bg-sch-green-light text-white w-fit rounded">
-                {getRoleDisplayName(role)}
+                {getRoleDisplayName(role)} {data?.class_name}
               </p>
             </div>
           </div>
-
+          {data?.group_leader && (
+            <div className="text-gray-500 text-left w-full mt-2">
+              Классный руководитель:
+              <br /> {data.group_leader.display_name}
+            </div>
+          )}
           <DropdownMenuSeparator className="my-3 bg-gray-200" />
 
           <Button

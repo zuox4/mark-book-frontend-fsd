@@ -1,19 +1,32 @@
 import api from "@/services/api/api";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../auth";
+
+interface BaseLeader {
+  display_name: string;
+  about: string | null;
+  image: string | null;
+  email: string | null;
+  max_url: string | null;
+}
 
 interface ApiStudentData {
   display_name: string;
   class_name: string;
   project_office_id: number | null;
+  group_leader: BaseLeader | null;
+  project_leader: BaseLeader | null;
 }
-// # получаем первоначальные данные ученика
+
 export const useStudentData = () => {
-  return useQuery<ApiStudentData>({
+  const { user } = useAuth();
+  return useQuery({
     queryKey: ["student"],
-    queryFn: async () => {
-      const response = await api.get<ApiStudentData>("/student");
-      return response.data; // возвращаем сразу data, а не весь response
+    queryFn: async (): Promise<ApiStudentData> => {
+      const { data } = await api.get<ApiStudentData>("/student");
+      return data;
     },
-    staleTime: 10 * 60 * 1000, // 10 минут - данные считаются свежими
+    enabled: user?.roles?.includes("student"),
+    staleTime: 60 * 60 * 1000, // 1 час
   });
 };

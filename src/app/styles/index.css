@@ -26,16 +26,15 @@ input:-webkit-autofill:active {
   border: 1px solid #1a6310; /* или ваш цвет бордера */
 }
 
-
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
     transform: translateY(-6px); /* Идеальная равномерная высота */
   }
 }
-
 
 @keyframes fadeIn {
   from {
@@ -50,4 +49,20 @@ input:-webkit-autofill:active {
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
+}
+
+/* В вашем globals.css или tailwind.config.js */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
 }

@@ -1,7 +1,7 @@
-import { Mark } from "@/pages/student/mark-book/markBookPage";
+import { type EventMark } from "@/hooks/student/useMarkBook";
 
 interface StatisticsProps {
-  marks: Mark[];
+  marks: EventMark[];
 }
 
 function Statistics({ marks }: StatisticsProps) {

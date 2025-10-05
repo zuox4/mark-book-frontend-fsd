@@ -9,7 +9,7 @@ const StudentPage = () => {
   // const { data } = useStudentData();
 
   return (
-    <div className="min-h-screen px-3 pt-25  xl:px-70 pb-10">
+    <div className="min-h-screen px-3 pt-25 md:px-10 lg:px-10 xl:px-30 pb-10">
       <Header />
       <Outlet />
     </div>

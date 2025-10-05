@@ -1,24 +1,22 @@
 import Header from "@/components/owner/header/Header";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/auth";
-import { useNavigate } from "react-router-dom";
 
 const TeacherPage = () => {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
-  const handleLogOut = () => {
-    try {
-      logout();
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  const { user } = useAuth();
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-25">
       <Header />
-      <Button onClick={handleLogOut}>Выйти</Button>
+      <h1 className="font-codec text-2xl text-center text-white">
+        Здравствуйте,
+        <br />
+        {user?.display_name}
+      </h1>
+      <h1 className="font-codec text-2xl text-center text-white">
+        Рабочее пространство сотрудника школы
+      </h1>
+      <h1 className="font-codec text-2xl text-center text-white">
+        В разработке...
+      </h1>
     </div>
   );
 };

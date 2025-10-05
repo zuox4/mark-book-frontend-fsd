@@ -5,9 +5,9 @@ import WelcomeRedirect from "@/pages/auth/WelcomRedirect";
 import StudentPage from "@/pages/student/student-page";
 import TeacherPage from "@/pages/teacher/TeacherPage";
 
-import MarkBookPage from "@/pages/student/mark-book/markBookPage";
+import MarkBookPage from "@/pages/student/mark-book/mark-book-page";
 import ProjectOfficePage from "@/pages/student/project-office/project-office-page";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import TanStackQueryClientProvider from "../providers/query-client-provider";
 
 export const router = createBrowserRouter([
@@ -19,6 +19,7 @@ export const router = createBrowserRouter([
       </TanStackQueryClientProvider>
     ), // Общий защищенный маршрут
     children: [
+      { index: true, element: <Navigate to={"/teacher"} /> },
       {
         path: "teacher",
         element: <ProtectedRoute requiredRole="teacher" />,

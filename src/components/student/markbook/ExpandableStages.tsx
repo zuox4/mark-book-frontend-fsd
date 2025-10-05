@@ -1,10 +1,10 @@
-import { Stage } from "@/pages/student/mark-book/markBookPage";
+import { type StageMark } from "@/hooks/student/useMarkBook";
 import StageItem from "./StageItem";
 
 // Компонент раскрывающейся части с этапами
 export interface ExpandableStagesProps {
   isExpanded: boolean;
-  stages: Stage[];
+  stages: StageMark[];
 }
 
 function ExpandableStages({ isExpanded, stages }: ExpandableStagesProps) {
@@ -14,8 +14,10 @@ function ExpandableStages({ isExpanded, stages }: ExpandableStagesProps) {
         isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
       }`}
     >
-      <div className="border-t border-gray-100 p-4">
-        <div className="space-y-3">
+      <div className="border-t border-gray-100/10 p-4">
+        <div
+          className={`flex flex-col gap-2 md:grid md:grid-cols-${stages.length}`}
+        >
           {stages.map((stage, index) => (
             <StageItem key={index} stage={stage} />
           ))}
