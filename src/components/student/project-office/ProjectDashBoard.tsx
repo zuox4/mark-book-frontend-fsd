@@ -1,6 +1,6 @@
 import { useStudentData } from "@/hooks/student/useStudentData";
 import { STATIC_BASE_URL } from "@/services/api/api";
-import MarkBookButton from "../MarkBookButton";
+import MarkBookButton from "./MarkBookButton";
 import ProjectEvents from "./ProjectEvents";
 import TeacherProfile from "./TeacherProfile";
 

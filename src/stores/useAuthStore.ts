@@ -133,7 +133,7 @@ export const useAuthStore = create<AuthState>()(
           error: null,
         });
 
-        toast.info("Logged out successfully");
+        // toast.info("Logged out successfully");
       },
 
       clearError: () => set({ error: null }),

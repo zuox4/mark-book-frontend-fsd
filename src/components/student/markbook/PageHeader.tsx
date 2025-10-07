@@ -1,7 +1,7 @@
 export interface PageHeaderProps {
   groupName: string;
   displayName: string;
-  projectTitle: string;
+  projectTitle?: string;
 }
 
 function PageHeader({ groupName, displayName, projectTitle }: PageHeaderProps) {

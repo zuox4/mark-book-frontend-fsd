@@ -1,16 +1,20 @@
 import { useAuthStore } from "@/stores/useAuthStore"; // Импортируем ваш store
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api";
-export const STATIC_BASE_URL = "http://127.0.0.1:8000/static/logos/";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+export const STATIC_BASE_URL =
+  import.meta.env.VITE_STATIC_BASE_URL || "http://127.0.0.1:8000/static/logos/";
+const API_TIMEOUT = import.meta.env.VITE_API_TIMEOUT || "10000";
+
 export const privateApi = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: Number(API_TIMEOUT),
 });
 
 export const publicApi = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: Number(API_TIMEOUT),
 });
 
 // Интерсептор с доступом к Zustand store
