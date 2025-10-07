@@ -18,7 +18,7 @@ const ProjectEvents = () => {
   const mobileEvents = isExpanded ? eventsToShow : eventsToShow.slice(0, 3);
 
   return (
-    <div className=" rounded-2xl min-w-[600px]">
+    <div className=" rounded-2xl">
       <h3 className="text-md font-bold text-white mb-4 uppercase border-b-2 border-sch-green-light pb-2 ">
         Мероприятия вашего профиля
       </h3>
