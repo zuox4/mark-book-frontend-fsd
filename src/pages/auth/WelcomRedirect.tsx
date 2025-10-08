@@ -1,7 +1,7 @@
 // components/auth/WelcomeRedirect.tsx
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "@/stores/useAuthStore";
 
 export const WelcomeRedirect: React.FC = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export const WelcomeRedirect: React.FC = () => {
           isExiting ? "opacity-0 scale-95" : "opacity-100 scale-100"
         }`}
       >
-        <div className="bg-sch-blue-ultra/50 rounded-2xl shadow-xl p-8 max-w-md w-full mx-4 text-center backdrop-blur-sm">
+        <div className=" rounded-2xl p-8 max-w-md w-full mx-4 text-center">
           {/* Логотип */}
           <div
             className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-700 ${getOpacityClass(1)}`}
@@ -81,15 +81,15 @@ export const WelcomeRedirect: React.FC = () => {
             className={`flex justify-center items-center space-x-2 text-gray-300 transition-all duration-700 ${getOpacityClass(5)}`}
           >
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-300"></div>
-            <span>Перенаправляем...</span>
+            <span>Подготавливаем рабочее пространство...</span>
           </div>
 
-          {/* Роль */}
+          {/* Роль
           <div
             className={`mt-6 text-sm text-gray-300 transition-all duration-700 ${getOpacityClass(6)}`}
           >
             Роль: {user?.roles?.join(", ") || "Пользователь"}
-          </div>
+          </div> */}
         </div>
       </div>
     );

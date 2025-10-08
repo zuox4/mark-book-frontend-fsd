@@ -91,7 +91,7 @@ const Header = () => {
             </div>
           </div>
           {data?.group_leader && (
-            <div className="text-gray-500 text-left w-full mt-2">
+            <div className="text-white lg:text-gray-700 text-left w-full mt-2">
               Классный руководитель:
               <br /> {data.group_leader.display_name}
             </div>
