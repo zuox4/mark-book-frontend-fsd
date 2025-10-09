@@ -27,7 +27,7 @@ const getProjectData = async (): Promise<RecordBookResponse> => {
   const res = await privateApi.get<RecordBookResponse>(
     "/student/record-book/marks"
   );
-
+  console.log(res.data);
   return res.data;
 };
 // # получаем проект

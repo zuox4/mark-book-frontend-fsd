@@ -47,7 +47,7 @@ const Header = () => {
   return (
     <header className="text-md lg:text-2xl py-2 px-2 h-20 lg:px-20 w-full z-50 rounded-b-2xl bg-[#1B4E71] font-codec justify-between text-white flex flex-row items-end fixed top-0 left-0">
       <h1 className="uppercase border-b-2 border-sch-green-light">
-        Единое школьное пространство
+        Зачетная книжка обучающегося
       </h1>
 
       <DropdownMenu>
@@ -115,7 +115,7 @@ const Header = () => {
 const SkeletonHeader = () => (
   <header className="text-md lg:text-2xl py-2 px-2 h-20 lg:px-20 w-full z-50 rounded-b-2xl bg-[#1B4E71] font-codec justify-between text-white flex flex-row items-end fixed top-0 left-0">
     <h1 className="uppercase border-b-2 border-sch-green-light">
-      Единое школьное пространство
+      Зачетная книжка обучающегося
     </h1>
     <div className="flex items-center gap-3">
       <div className="hidden lg:block w-24 h-4 bg-gray-400 rounded animate-pulse" />
@@ -127,7 +127,7 @@ const SkeletonHeader = () => (
 const BasicHeader = () => (
   <header className="text-md lg:text-2xl py-2 px-2 h-20 lg:px-20 w-full z-50 rounded-b-2xl bg-[#1B4E71] font-codec justify-between text-white flex flex-row items-end fixed top-0 left-0">
     <h1 className="uppercase border-b-2 border-sch-green-light">
-      Единое школьное пространство
+      Зачетная книжка обучающегося
     </h1>
     <Avatar className="rounded-full">
       <AvatarFallback className="bg-sch-green-light">?</AvatarFallback>

@@ -1,6 +1,6 @@
 // pages/TeacherPage.tsx
 import Header from "@/components/owner/header/Header";
-import ContentContainer from "@/components/teacher/ContentContainer";
+import ContentContainer from "@/components/teacher/event-leader/ContentContainer";
 import TeacherNavigation from "@/components/teacher/TeacherNavigation";
 
 import { Outlet } from "react-router-dom";

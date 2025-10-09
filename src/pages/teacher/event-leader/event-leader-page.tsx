@@ -1,7 +1,9 @@
+import EventLeaderDashBoard from "@/components/teacher/event-leader/EventLeaderDashBoard";
+
 const EventLeaderPage = () => {
   return (
     <div>
-      <h1>Совсем скоро тут появиться информация для вас</h1>
+      <EventLeaderDashBoard />
     </div>
   );
 };
