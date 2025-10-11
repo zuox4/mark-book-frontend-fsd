@@ -7,6 +7,11 @@ export interface ApiUserData {
   roles: string[] | string;
   image?: string;
   email: string;
+  has_any_data: boolean;
+  has_p_office: boolean;
+  has_event_types: boolean;
+  has_groups_leader: boolean;
+  has_admin: boolean;
 }
 
 export const useUserData = (id: number | undefined) => {

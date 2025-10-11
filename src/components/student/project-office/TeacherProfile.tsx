@@ -72,7 +72,7 @@ const TeacherProfile = ({
 
   // Десктопная версия (без изменений)
   const desktopView = (
-    <div className="hidden min-w-[450px] lg:flex flex-col gap-3 border-1 border-sch-green-light relative bg-sch-blue-dark/40 p-4 lg:flex-row lg:p-5 rounded-2xl lg:bg-sch-blue-dark/10">
+    <div className="hidden min-w-[450px] h-fit lg:flex flex-col gap-3 border-1 border-sch-green-light relative bg-sch-blue-dark/40 p-4 lg:flex-row lg:p-5 rounded-2xl lg:bg-sch-blue-dark/10">
       <div className="flex justify-center lg:absolute -right-3 -top-5">
         <Avatar
           className={`rounded-lg w-full max-w-[200px] h-[200px] lg:w-30 lg:h-30 lg:ring-2 ring-white lg:rounded-full flex-shrink-0`}

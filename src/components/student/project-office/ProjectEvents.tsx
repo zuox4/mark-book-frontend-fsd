@@ -4,13 +4,15 @@ import { useState } from "react";
 
 const ProjectEvents = () => {
   const { data } = useProjectData();
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const eventsToShow = data?.accessible_events || [];
+  const eventsToShow =
+    data?.accessible_events.filter((event) => event.is_active) || [];
 
   // На десктопе всегда показываем все мероприятия
   const desktopEvents = eventsToShow;

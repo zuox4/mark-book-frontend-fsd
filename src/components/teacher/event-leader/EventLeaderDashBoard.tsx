@@ -1,5 +1,6 @@
 import { useEventsForLeaderEvent } from "@/hooks/teacher/useEventLeadeEvents";
 import { useAllGroups } from "@/hooks/teacher/useEventLeaderGroups";
+
 import { useEffect, useState } from "react";
 import Loader from "../../owner/Loader";
 import EventsListFilter from "./EventsListFilter";
@@ -33,6 +34,7 @@ const EventTypeLeaderDashBoard = () => {
       <h1 className="text-2xl font-bold mb-6">Журнал мероприятий</h1>
 
       {/* Фильтры */}
+
       <div className="space-y-6 mb-6">
         <GroupListFilter
           groups={groups}

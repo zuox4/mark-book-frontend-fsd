@@ -4,7 +4,7 @@ export interface NavItem {
   label: string;
   icon?: string;
   description?: string;
-  requiredRole?: string[];
+  requiredRole?: string;
 }
 
 export const teacherNavItems: NavItem[] = [
@@ -16,31 +16,31 @@ export const teacherNavItems: NavItem[] = [
   },
   {
     to: "admin",
-    label: "Админка",
+    label: "Администратор",
     icon: "⚙️",
     description: "Управление системой",
-    requiredRole: ["admin"],
+    requiredRole: "admin",
   },
   {
     to: "class-leader",
     label: "Классное руководство",
     icon: "👨‍🏫",
     description: "Управление классом",
-    requiredRole: ["class_leader"],
+    requiredRole: "group_leader",
   },
   {
     to: "project-leader",
     label: "Проектный офис",
     icon: "🏢",
     description: "Управление проектами",
-    requiredRole: ["project_leader"],
+    requiredRole: "project_leader",
   },
   {
     to: "event-leader",
     label: "Мои мероприятия",
     icon: "📊",
     description: "Мероприятия и результаты",
-    requiredRole: ["event_leader"],
+    requiredRole: "event_leader",
   },
 ];
 

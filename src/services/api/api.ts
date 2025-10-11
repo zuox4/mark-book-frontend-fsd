@@ -34,21 +34,39 @@ privateApi.interceptors.request.use(
 );
 
 privateApi.interceptors.response.use(
-  (response) => {
-    // Любой статус в диапазоне 2xx вызовет эту функцию
-    return response;
-  },
-  (error) => {
-    // Любые статусы за пределами диапазона 2xx вызовут эту функцию
-    if (error.response?.status === 401) {
-      // 1. Вызовите метод logout из вашего Zustand store
-      const logout = useAuthStore.getState().logout;
-      logout(); // Убедитесь, что этот метод очищает token и сбрасывает состояние аутентификации:cite[2]
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Если ошибка 401 и это не запрос на логин/обновление токена
+    if (
+      error.response?.status === 401 &&
+      !originalRequest.url?.includes("/auth/login") &&
+      !originalRequest.url?.includes("/auth/refresh") &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        const newToken = await useAuthStore.getState().refreshAuth();
+
+        if (newToken) {
+          // Обновляем токен в заголовке и повторяем запрос
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          return privateApi(originalRequest);
+        } else {
+          // Если обновление токена не удалось, разлогиниваем
+          useAuthStore.getState().logout();
+          window.location.href = "/login";
+        }
+      } catch (refreshError) {
+        useAuthStore.getState().logout();
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
     }
 
-    // 3. Прервите цепочку Promise, чтобы ошибка не обрабатывалась в запросе:cite[4]
     return Promise.reject(error);
   }
 );
-
 export default privateApi;

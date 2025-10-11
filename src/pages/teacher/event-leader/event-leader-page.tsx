@@ -1,11 +1,7 @@
 import EventLeaderDashBoard from "@/components/teacher/event-leader/EventLeaderDashBoard";
 
 const EventLeaderPage = () => {
-  return (
-    <div>
-      <EventLeaderDashBoard />
-    </div>
-  );
+  return <EventLeaderDashBoard />;
 };
 
 export default EventLeaderPage;

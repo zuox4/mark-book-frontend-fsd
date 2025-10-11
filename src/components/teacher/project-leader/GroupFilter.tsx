@@ -26,32 +26,10 @@ const GroupFilter: React.FC<GroupFilterProps> = ({
     }
   };
 
-  const selectAll = () => {
-    onGroupsChange(groups.map((g) => g.name));
-  };
-
-  const clearAll = () => {
-    onGroupsChange([]);
-  };
-
   return (
     <div className="bg-gray-800 rounded-lg p-4 mb-6">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-medium text-white">Фильтр по классам</h3>
-        <div className="space-x-2">
-          <button
-            onClick={selectAll}
-            className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
-          >
-            Выбрать все
-          </button>
-          <button
-            onClick={clearAll}
-            className="text-xs bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded"
-          >
-            Сбросить
-          </button>
-        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">

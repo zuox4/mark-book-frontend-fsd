@@ -21,29 +21,47 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <TanStackQueryClientProvider>
-        <ProtectedRoute />
+        <ProtectedRoute /> {/* Проверяет авторизацию */}
       </TanStackQueryClientProvider>
-    ), // Общий защищенный маршрут
+    ),
     children: [
       { index: true, element: <Navigate to={"/teacher"} /> },
       {
         path: "teacher",
-        element: <ProtectedRoute requiredRole="teacher" />,
+        element: <ProtectedRoute requiredRole="teacher" />, // Только учителя
         children: [
           {
             element: <TeacherPage />,
             children: [
-              { path: "", element: <WelcomePage /> },
-              { path: "project-leader", element: <ProjectLeaderPage /> },
-              { path: "class-leader", element: <ClassLeaderPage /> },
-              { path: "event-leader", element: <EventLeaderPage /> },
+              { path: "", element: <WelcomePage /> }, // Доступно всем учителям
+              {
+                path: "project-leader",
+                element: <ProtectedRoute requiredRole="project_leader" />, // Только с p_office
+                children: [{ path: "", element: <ProjectLeaderPage /> }],
+              },
+              {
+                path: "class-leader",
+                element: <ProtectedRoute requiredRole="class_leader" />, // Только с groups_leader
+                children: [{ path: "", element: <ClassLeaderPage /> }],
+              },
+              {
+                path: "event-leader",
+                element: <ProtectedRoute requiredRole="event_leader" />, // Только с event_types
+                children: [{ path: "", element: <EventLeaderPage /> }],
+              },
               {
                 path: "admin",
-                element: <AdminPage />,
+                element: <ProtectedRoute requiredRole="admin" />, // Только админы
                 children: [
                   {
-                    path: "event-types",
-                    element: <EventTypes />,
+                    path: "",
+                    element: <AdminPage />,
+                    children: [
+                      {
+                        path: "event-types",
+                        element: <EventTypes />,
+                      },
+                    ],
                   },
                 ],
               },
@@ -53,7 +71,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "student",
-        element: <ProtectedRoute requiredRole="student" />,
+        element: <ProtectedRoute requiredRole="student" />, // Только студенты
         children: [
           {
             element: <StudentPage />,

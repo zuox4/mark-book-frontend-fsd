@@ -2,10 +2,9 @@ import ClassTeacherDashboard from "@/components/teacher/class-teacher/ClassTeach
 
 const ClassLeaderPage = () => {
   return (
-    <div>
-      <h1>Совсем скоро тут появиться информация для вас</h1>
+    <>
       <ClassTeacherDashboard />
-    </div>
+    </>
   );
 };
 

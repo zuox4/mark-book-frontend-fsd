@@ -9,7 +9,7 @@ const MarkBookButton = () => {
   return (
     <div
       onClick={navToMarkBook}
-      className="flex lg:w-fit lg:h-15 lg:animate-[float_3s_ease-in-out_infinite] items-center justify-between w-full gap-3 px-4 py-3 lg:from-sch-green-light/20 lg:to-sch-green-light/30 border bg-gradient-to-r cursor-pointer from-sch-green-light/10 to-sch-green-light/5 border border-sch-green-light/30 rounded-2xl hover:from-sch-green-light/15 hover:to-sch-green-light/10 transition-all duration-300 group shadow-sm hover:shadow-md"
+      className="flex lg:w-fit lg:h-15 lg:animate-[float_3s_ease-in-out_infinite] items-center justify-between w-full gap-3 px-4 py-3 lg:from-sch-green-light/20 lg:to-sch-green-light/70 bg-gradient-to-r cursor-pointer from-sch-green-light/30 to-sch-green-light/20 border border-sch-green-light rounded-2xl hover:from-sch-green-light/15 hover:to-sch-green-light/10 transition-all duration-300 group shadow-sm hover:shadow-md"
     >
       <div className="flex gap-2 items-center h-10">
         <BookMarked color="white" />

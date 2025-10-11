@@ -7,7 +7,9 @@ const AdminPage = () => {
         Панель администрирования
       </h1>
       <div className="project_offices">
-        <Link to={"event-types"}>Менеджер типов мероприятий</Link>
+        <Link to={"event-types"} className="underline text-2xl text-white ">
+          Менеджер типов мероприятий
+        </Link>
         <Outlet />
       </div>
     </div>

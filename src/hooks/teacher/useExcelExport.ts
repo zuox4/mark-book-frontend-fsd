@@ -7,7 +7,7 @@ interface ExportData {
   fileName?: string;
 }
 
-// Функция для сохранения файла (замена file-saver)
+// Функция для сохранения файла
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const saveFile = (buffer: any, fileName: string) => {
   const blob = new Blob([buffer], {
@@ -52,17 +52,18 @@ export const useExcelExport = () => {
           // Создаем лист
           const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
-          // Добавляем лист в книгу (имя листа ограничено 31 символом)
+          // Настраиваем ширину колонок
+          setupColumnWidths(worksheet, groupStudents);
+
+          // Добавляем объединение ячеек для заголовков мероприятий
+          setupCellMerging(worksheet, groupStudents);
+
+          // Добавляем лист в книгу
           const safeSheetName = groupName
             .replace(/[\\/*[\]:?]/g, "")
             .substring(0, 31);
           XLSX.utils.book_append_sheet(workbook, worksheet, safeSheetName);
         });
-
-        // Создаем сводный лист
-        const summaryWorksheetData = prepareSummarySheetData(students);
-        const summaryWorksheet = XLSX.utils.aoa_to_sheet(summaryWorksheetData);
-        XLSX.utils.book_append_sheet(workbook, summaryWorksheet, "Сводка");
 
         // Генерируем файл и скачиваем
         const excelBuffer = XLSX.write(workbook, {
@@ -83,6 +84,81 @@ export const useExcelExport = () => {
   return { exportToExcel };
 };
 
+// Функция для настройки ширины колонок
+const setupColumnWidths = (
+  worksheet: XLSX.WorkSheet,
+  students: PivotStudent[]
+) => {
+  // Создаем массив колонок если его нет
+  if (!worksheet["!cols"]) {
+    worksheet["!cols"] = [];
+  }
+
+  // Базовая ширина для колонки с ФИО
+  worksheet["!cols"].push({ wch: 25 }); // ФИО ученика
+
+  // Определяем максимальное количество этапов среди всех мероприятий
+  const maxStagesPerEvent = getMaxStagesPerEvent(students);
+
+  // Для каждого мероприятия добавляем колонки под этапы
+  if (students.length > 0) {
+    const eventIds = Object.keys(students[0].events);
+    eventIds.forEach(() => {
+      // Для каждого мероприятия добавляем колонки под все возможные этапы
+      for (let i = 0; i < maxStagesPerEvent; i++) {
+        if (!worksheet["!merges"]) {
+          worksheet["!merges"] = [];
+        }
+      }
+    });
+  }
+};
+
+// Функция для настройки объединения ячеек
+const setupCellMerging = (
+  worksheet: XLSX.WorkSheet,
+  students: PivotStudent[]
+) => {
+  // Создаем массив объединений если его нет
+  if (!worksheet["!merges"]) {
+    worksheet["!merges"] = [];
+  }
+
+  const eventIds = students.length > 0 ? Object.keys(students[0].events) : [];
+  const maxStagesPerEvent = getMaxStagesPerEvent(students);
+
+  let currentCol = 1; // Начинаем с колонки B (после ФИО)
+
+  // Объединяем заголовки мероприятий (строка 4)
+  eventIds.forEach(() => {
+    if (maxStagesPerEvent > 1) {
+      // Создаем новый массив объединений чтобы избежать мутации
+      const newMerges = [
+        ...(worksheet["!merges"] || []),
+        {
+          s: { r: 3, c: currentCol }, // Строка 4, текущая колонка
+          e: { r: 3, c: currentCol + maxStagesPerEvent - 1 }, // Объединяем на maxStagesPerEvent колонок
+        },
+      ];
+      worksheet["!merges"] = newMerges;
+    }
+    currentCol += maxStagesPerEvent;
+  });
+};
+
+// Функция для получения максимального количества этапов в одном мероприятии
+const getMaxStagesPerEvent = (students: PivotStudent[]): number => {
+  let maxStages = 0;
+  students.forEach((student) => {
+    Object.values(student.events).forEach((event) => {
+      if (event.stages && event.stages.length > maxStages) {
+        maxStages = event.stages.length;
+      }
+    });
+  });
+  return maxStages;
+};
+
 // Функция для подготовки данных листа класса
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const prepareGroupSheetData = (students: PivotStudent[]): any[][] => {
@@ -94,158 +170,99 @@ const prepareGroupSheetData = (students: PivotStudent[]): any[][] => {
   data.push(["Дата выгрузки", new Date().toLocaleDateString("ru-RU")]);
   data.push([]);
 
-  // Получаем все мероприятия
-  const allEvents = students.length > 0 ? Object.keys(students[0].events) : [];
+  // Получаем список всех мероприятий
+  const eventIds = students.length > 0 ? Object.keys(students[0].events) : [];
+  const maxStagesPerEvent = getMaxStagesPerEvent(students);
 
-  // Заголовки таблицы
-  const headers = [
-    "№",
-    "ФИО ученика",
-    ...allEvents.flatMap((eventId) => {
-      const event = students[0]?.events[eventId];
-      return [
-        `${event?.event_name} - Общий балл`,
-        `${event?.event_name} - Статус`,
-        `${event?.event_name} - Завершено стадий`,
-      ];
-    }),
-  ];
+  // Создаем сложные заголовки для мероприятий и этапов
+  const headers = ["ФИО ученика"];
+
+  // Для каждого мероприятия создаем группу колонок под этапы
+  eventIds.forEach((eventId) => {
+    const event = students[0]?.events[eventId];
+    const eventName = event?.event_name || "Мероприятие";
+
+    // Добавляем основной заголовок мероприятия (объединяющий все его этапы)
+    headers.push(eventName);
+
+    // Добавляем пустые заголовки для объединения ячеек
+    for (let i = 1; i < maxStagesPerEvent; i++) {
+      headers.push("");
+    }
+  });
+
   data.push(headers);
 
-  // Данные студентов
-  students.forEach((student, index) => {
-    const row = [index + 1, student.student_name];
+  // Вторая строка заголовков - названия этапов
+  const stageHeaders = [""]; // Пусто под "ФИО ученика"
 
-    allEvents.forEach((eventId) => {
+  eventIds.forEach((eventId) => {
+    const event = students[0]?.events[eventId];
+    const stages = event?.stages || [];
+
+    // Добавляем названия этапов
+    stages.forEach((stage) => {
+      stageHeaders.push(stage.name);
+    });
+
+    // Добавляем пустые ячейки если этапов меньше максимального
+    const emptySlots = maxStagesPerEvent - stages.length;
+    for (let i = 0; i < emptySlots; i++) {
+      stageHeaders.push("");
+    }
+  });
+
+  data.push(stageHeaders);
+
+  // Третья строка заголовков - статусы
+  const statusHeaders = [""]; // Пусто под "ФИО ученика"
+
+  eventIds.forEach((eventId) => {
+    const event = students[0]?.events[eventId];
+    const stages = event?.stages || [];
+
+    // Добавляем подзаголовки "Статус" для каждого этапа
+    stages.forEach(() => {
+      statusHeaders.push("Статус");
+    });
+
+    // Добавляем пустые ячейки если этапов меньше максимального
+    const emptySlots = maxStagesPerEvent - stages.length;
+    for (let i = 0; i < emptySlots; i++) {
+      statusHeaders.push("");
+    }
+  });
+
+  data.push(statusHeaders);
+
+  // Данные студентов - только статусы
+  students.forEach((student) => {
+    const row = [student.student_name];
+
+    eventIds.forEach((eventId) => {
       const event = student.events[eventId];
-      if (event) {
-        row.push(
-          event.total_score,
-          event.status,
-          `${event.completed_stages_count}/${event.min_stages_required}`
-        );
+
+      if (event && event.stages) {
+        // Добавляем СТАТУСЫ по каждому этапу
+        event.stages.forEach((stage) => {
+          row.push(stage.status); // Только статус: "зачет" или "незачет"
+        });
+
+        // Добавляем пустые ячейки если этапов меньше максимального
+        const emptySlots = maxStagesPerEvent - event.stages.length;
+        for (let i = 0; i < emptySlots; i++) {
+          row.push("");
+        }
       } else {
-        row.push("", "Нет данных", "");
+        // Если нет данных о мероприятии, добавляем пустые ячейки для всех этапов
+        for (let i = 0; i < maxStagesPerEvent; i++) {
+          row.push("Нет данных");
+        }
       }
     });
 
     data.push(row);
   });
-
-  return data;
-};
-
-// Функция для подготовки сводного листа
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const prepareSummarySheetData = (students: PivotStudent[]): any[][] => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data: any[][] = [];
-
-  // Заголовок
-  data.push(["Сводный отчет по проектному офису"]);
-  data.push(["Дата выгрузки", new Date().toLocaleDateString("ru-RU")]);
-  data.push(["Всего учеников", students.length]);
-  data.push([]);
-
-  // Статистика по классам
-  data.push(["Статистика по классам"]);
-  data.push([
-    "Класс",
-    "Кол-во учеников",
-    "Успешных мероприятий",
-    "Средний балл",
-    "Процент успешности",
-  ]);
-
-  const groups = [...new Set(students.map((student) => student.group_name))];
-  groups.forEach((groupName) => {
-    const groupStudents = students.filter(
-      (student) => student.group_name === groupName
-    );
-    const totalEvents = groupStudents.reduce(
-      (sum, student) => sum + Object.keys(student.events).length,
-      0
-    );
-    const completedEvents = groupStudents.reduce(
-      (sum, student) =>
-        sum +
-        Object.values(student.events).filter(
-          (event) => event.status === "зачет"
-        ).length,
-      0
-    );
-    const averageScore =
-      totalEvents > 0
-        ? groupStudents.reduce(
-            (sum, student) =>
-              sum +
-              Object.values(student.events).reduce(
-                (eventSum, event) => eventSum + event.total_score,
-                0
-              ),
-            0
-          ) / totalEvents
-        : 0;
-
-    data.push([
-      groupName,
-      groupStudents.length,
-      completedEvents,
-      averageScore.toFixed(2),
-      totalEvents > 0
-        ? `${((completedEvents / totalEvents) * 100).toFixed(1)}%`
-        : "0%",
-    ]);
-  });
-
-  data.push([]);
-
-  // Статистика по мероприятиям
-  data.push(["Статистика по мероприятиям"]);
-  data.push([
-    "Мероприятие",
-    "Участвовало учеников",
-    "Зачтено",
-    "В процессе",
-    "Не начато",
-    "Средний балл",
-  ]);
-
-  if (students.length > 0) {
-    const allEvents = Object.keys(students[0].events);
-    allEvents.forEach((eventId) => {
-      const eventName = students[0].events[eventId].event_name;
-      const eventStudents = students.filter(
-        (student) => student.events[eventId]
-      );
-      const completed = eventStudents.filter(
-        (student) => student.events[eventId]?.status === "зачет"
-      ).length;
-      const inProgress = eventStudents.filter(
-        (student) => student.events[eventId]?.status === "в процессе"
-      ).length;
-      const notStarted = eventStudents.filter(
-        (student) => student.events[eventId]?.status === "не начато"
-      ).length;
-      const averageScore =
-        eventStudents.length > 0
-          ? eventStudents.reduce(
-              (sum, student) =>
-                sum + (student.events[eventId]?.total_score || 0),
-              0
-            ) / eventStudents.length
-          : 0;
-
-      data.push([
-        eventName,
-        eventStudents.length,
-        completed,
-        inProgress,
-        notStarted,
-        averageScore.toFixed(2),
-      ]);
-    });
-  }
 
   return data;
 };

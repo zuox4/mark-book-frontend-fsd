@@ -6,7 +6,7 @@ export interface PivotStudent {
   id: number;
   student_name: string;
   group_name: string;
-  class_teacher?: string;
+  class_teacher?: string; // Делаем опциональным
   events: {
     [eventId: string]: {
       event_name: string;
@@ -36,9 +36,12 @@ export const useProjectOfficePivot = (selectedGroups: string[] = []) => {
         });
       }
 
-      const response = await privateApi.get("/project-office/pivot-data", {
-        params,
-      });
+      const response = await privateApi.get(
+        "/project-office/pivot-data-optimized",
+        {
+          params,
+        }
+      );
       return response.data;
     },
     enabled: true, // Всегда включен, но фильтруется по selectedGroups

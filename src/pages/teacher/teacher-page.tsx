@@ -7,9 +7,8 @@ import { Outlet } from "react-router-dom";
 
 const TeacherPage = () => {
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen px-3">
       <Header />
-
       <div className="pt-20">
         <div className="flex flex-col items-center mt-3">
           <TeacherNavigation />

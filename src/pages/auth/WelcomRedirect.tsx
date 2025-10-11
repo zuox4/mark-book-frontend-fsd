@@ -1,5 +1,6 @@
 // components/auth/WelcomeRedirect.tsx
 import { useAuthStore } from "@/stores/useAuthStore";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +8,7 @@ export const WelcomeRedirect: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const [animationStage, setAnimationStage] = useState(0);
+
   const [isExiting, setIsExiting] = useState(false);
   useEffect(() => {
     // Поэтапное появление элементов
@@ -83,7 +85,7 @@ export const WelcomeRedirect: React.FC = () => {
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-300"></div>
             <span>Подготавливаем рабочее пространство...</span>
           </div>
-
+          <DotLottieReact src="/qwe.json" loop autoplay />
           {/* Роль
           <div
             className={`mt-6 text-sm text-gray-300 transition-all duration-700 ${getOpacityClass(6)}`}

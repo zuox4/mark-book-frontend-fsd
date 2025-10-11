@@ -1,4 +1,4 @@
-import AddEventTypeForm from "@/components/admin/EventTypeform/AddEventTypeForm";
+import AddEventTypeForm from "@/components/admin/EventType/EventTypeform/AddEventTypeForm";
 
 const CreateEventType = () => {
   return (

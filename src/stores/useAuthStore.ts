@@ -15,11 +15,14 @@ export interface User {
 interface AuthState {
   user: User | null;
   token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
+  refreshAuth: () => Promise<string | null>;
+
   logout: () => void;
 
   clearError: () => void;
@@ -30,9 +33,10 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
+      refreshToken: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
@@ -74,11 +78,16 @@ export const useAuthStore = create<AuthState>()(
             email,
             password,
           });
-          const { user, access_token: token } = response.data;
+          const {
+            user,
+            access_token: token,
+            refresh_token: refreshToken,
+          } = response.data;
 
           set({
             user,
             token,
+            refreshToken,
             isAuthenticated: true,
             isLoading: false,
           });
@@ -124,11 +133,54 @@ export const useAuthStore = create<AuthState>()(
           throw error;
         }
       },
+      refreshAuth: async () => {
+        const { refreshToken } = get();
 
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
+        }
+
+        try {
+          const response = await privateApi.post("/auth/refresh", {
+            refresh_token: refreshToken,
+          });
+
+          const {
+            user,
+            access_token: token,
+            refresh_token: newRefreshToken,
+          } = response.data;
+
+          set({
+            user,
+            token,
+            refreshToken: newRefreshToken || refreshToken, // Используем новый если есть, иначе старый
+            isAuthenticated: true,
+          });
+
+          return token;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          const errorMessage =
+            error.response?.data?.detail || "Token refresh failed";
+          console.error(errorMessage);
+          // Если refresh не удался, разлогиниваем пользователя
+          set({
+            user: null,
+            token: null,
+            refreshToken: null,
+            isAuthenticated: false,
+          });
+
+          toast.error("Session expired. Please login again.");
+          throw error;
+        }
+      },
       logout: () => {
         set({
           user: null,
           token: null,
+          refreshToken: null,
           isAuthenticated: false,
           error: null,
         });

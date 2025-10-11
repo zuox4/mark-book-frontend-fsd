@@ -1,5 +1,4 @@
 // components/project-office/ProjectOfficeDashboard.tsx
-import { useProjectOfficeEvents } from "@/hooks/teacher/useProjectOfficeEvents";
 import { useProjectOfficeGroups } from "@/hooks/teacher/useProjectOfficeGroups";
 import {
   PivotStudent,
@@ -18,8 +17,6 @@ const ProjectOfficeDashboard: React.FC = () => {
     null
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { data: events = [] } = useProjectOfficeEvents();
   const { data: groups = [] } = useProjectOfficeGroups();
   const {
     data: pivotData,
@@ -54,7 +51,7 @@ const ProjectOfficeDashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-6 text-white font-codec-news">
+    <div className=" text-white font-codec-news">
       {/* Заголовок */}
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -66,10 +63,6 @@ const ProjectOfficeDashboard: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          <ExportButton
-            students={pivotData || []}
-            disabled={!pivotData || pivotData.length === 0}
-          />
           <div className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm border border-blue-500/30">
             Руководитель проектного офиса
           </div>
@@ -90,18 +83,11 @@ const ProjectOfficeDashboard: React.FC = () => {
       <div className="mt-8">
         {pivotData && pivotData.length > 0 ? (
           <div className="bg-gray-800 rounded-lg p-4">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col justify-between items-center md:flex-row mb-4">
               <h2 className="text-xl font-semibold">
                 Сводная таблица результатов
               </h2>
               <div className="flex items-center space-x-4">
-                <div className="text-sm text-gray-400">
-                  Учеников: {pivotData.length} • Мероприятий:{" "}
-                  {pivotData[0] ? Object.keys(pivotData[0].events).length : 0}
-                  <span className="ml-4 text-blue-300">
-                    💡 Нажмите на строку для детальной информации
-                  </span>
-                </div>
                 <ExportButton students={pivotData} disabled={false} />
               </div>
             </div>

@@ -5,6 +5,7 @@ import { useStudentData } from "./useStudentData";
 export interface Event {
   id: number;
   title: string;
+  is_active?: boolean;
 }
 interface ApiProjectOffice {
   title: string;

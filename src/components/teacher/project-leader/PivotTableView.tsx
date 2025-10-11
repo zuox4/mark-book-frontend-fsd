@@ -45,11 +45,6 @@ const PivotTableView: React.FC<PivotTableViewProps> = ({
                   className="px-3 py-3 text-center text-sm font-medium text-white border-r border-gray-600 min-w-[180px]"
                 >
                   <div className="font-medium">{event?.event_name}</div>
-                  <div className="text-xs text-gray-300 font-normal mt-1">
-                    {event
-                      ? `${event.completed_stages_count}/${event.min_stages_required}`
-                      : "0/0"}
-                  </div>
                 </th>
               );
             })}
@@ -102,20 +97,6 @@ const PivotTableView: React.FC<PivotTableViewProps> = ({
                     className="px-3 py-3 text-center border-r border-gray-700"
                   >
                     <div className="flex flex-col items-center space-y-2">
-                      {/* Общий балл */}
-                      <div
-                        className={`text-lg font-bold ${
-                          event.total_score > 0
-                            ? event.completed_stages_count >=
-                              event.min_stages_required
-                              ? "text-green-400"
-                              : "text-yellow-400"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {event.total_score}
-                      </div>
-
                       {/* Статус */}
                       <div
                         className={`text-xs px-2 py-1 rounded-full ${statusInfo.color}`}

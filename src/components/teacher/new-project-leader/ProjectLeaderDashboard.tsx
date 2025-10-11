@@ -1,8 +1,8 @@
 // components/class-teacher/ClassTeacherDashboard.tsx
 import { StageInfo } from "@/hooks/teacher/journal/types";
 import { useClassTeacherJournal } from "@/hooks/teacher/journal/useClassTeacherJournal";
-import { useEventsForClassTeacher } from "@/hooks/teacher/useClassTeacherEvents";
-import { useClassTeacherGroups } from "@/hooks/teacher/useClassTeacherGroups";
+import { useProjectOfficeEvents } from "@/hooks/teacher/useProjectOfficeEvents";
+import { useProjectOfficeGroups } from "@/hooks/teacher/useProjectOfficeGroups";
 import { motion } from "framer-motion";
 import React from "react";
 import EventsListFilter from "../event-leader/EventsListFilter";
@@ -14,8 +14,8 @@ const ClassTeacherDashboard = () => {
   const [eventId, setEventId] = React.useState<number | null>(null);
   const [groupId, setGroupId] = React.useState<number | null>(null);
 
-  const { data: events = [] } = useEventsForClassTeacher();
-  const { data: groups = [] } = useClassTeacherGroups();
+  const { data: events = [] } = useProjectOfficeEvents();
+  const { data: groups = [] } = useProjectOfficeGroups();
 
   const {
     data: journalData,
