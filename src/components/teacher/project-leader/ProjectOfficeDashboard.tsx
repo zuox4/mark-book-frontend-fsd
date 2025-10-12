@@ -63,7 +63,7 @@ const ProjectOfficeDashboard: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm border border-blue-500/30">
+          <div className="bg-blue-500/20 hidden md:block text-blue-300 px-3 py-1 rounded-full text-sm border border-blue-500/30">
             Руководитель проектного офиса
           </div>
         </div>

@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/auth";
 import { Label } from "@radix-ui/react-label";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom"; // Добавь этот импорт
+import { Link, Navigate, useNavigate } from "react-router-dom"; // Добавь этот импорт
+import CorrectGoogleButton from "./GoogleLoginButton";
 
 const LoginForm = () => {
   const initialState = { email: "", password: "" };
@@ -79,12 +80,12 @@ const LoginForm = () => {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  <Link
+                    to={"/forgot-password"}
+                    className="ml-auto inline-block text-sm underline-offset-4 underline hover:underline"
                   >
-                    Forgot your password?
-                  </a>
+                    Забыли пароль?
+                  </Link>
                 </div>
                 <Input
                   id="password"
@@ -107,6 +108,7 @@ const LoginForm = () => {
           >
             {isLoading ? "Отправка" : "Войти"}
           </Button>
+          <CorrectGoogleButton />
         </CardFooter>
       </Card>
     </>

@@ -22,7 +22,7 @@ const WelcomePage = () => {
         return hasPoffice;
       case "event_leader":
         return hasEventTypes;
-      case "groups_leader":
+      case "group_leader":
         return hasGroupsLeader;
       case "admin":
         return hasAdmin;
@@ -32,24 +32,24 @@ const WelcomePage = () => {
   };
   const filteredNavItems = teacherNavItems.filter((item) => item.to !== "");
   return (
-    <div className="mx-auto min-h-screen space-y-8 font-codec-news">
+    <div className="mx-auto min-h-screen space-y-4 font-codec-news">
       {/* Заголовок */}
       <div className="text-center">
         <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 uppercase">
           {user?.display_name}
         </h1>
-        <p className="text-xl text-sch-green-light">
+        <p className="text-2xl md:text-4xl text-sch-green-light">
           Добро пожаловать в систему учета достижений
         </p>
       </div>
 
       {/* Основная информация о системе */}
       <div className="rounded-2xl">
-        <h2 className="text-xl font-semibold uppercase text-white mb-6">
+        <h2 className=" text-lg md:text-xl font-semibold uppercase text-white mb-3">
           О платформе
         </h2>
         <div className="prose prose-lg max-w-none text-white uppercase space-y-4">
-          <p className="text-xl leading-relaxed">
+          <p className="text-lg md:text-xl leading-relaxed">
             Это приложение предназначено для администрирования результатами
             учеников 10-11 класса в мероприятиях{" "}
             <strong className="text-sch-green-light">

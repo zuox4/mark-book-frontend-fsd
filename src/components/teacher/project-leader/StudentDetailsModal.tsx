@@ -60,13 +60,7 @@ const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
   const inProgressEvents = Object.values(extendedStudent.events).filter(
     (e) => e.status === "в процессе"
   ).length;
-  const averageScore =
-    totalEvents > 0
-      ? Object.values(extendedStudent.events).reduce(
-          (sum, e) => sum + e.total_score,
-          0
-        ) / totalEvents
-      : 0;
+
   const successRate =
     totalEvents > 0 ? (completedEvents / totalEvents) * 100 : 0;
 

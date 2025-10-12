@@ -5,6 +5,7 @@ import WelcomeRedirect from "@/pages/auth/WelcomRedirect";
 import StudentPage from "@/pages/student/student-page";
 import TeacherPage from "@/pages/teacher/teacher-page";
 
+import FogotPassword from "@/pages/auth/FogotPassword";
 import MarkBookPage from "@/pages/student/mark-book/mark-book-page";
 import ProjectOfficePage from "@/pages/student/project-office/project-office-page";
 import AdminPage from "@/pages/teacher/admin/admin-page";
@@ -93,6 +94,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <AuthPage />,
+  },
+  {
+    path: "/forgot-password",
+    element: <FogotPassword />,
   },
   {
     path: "/registration",

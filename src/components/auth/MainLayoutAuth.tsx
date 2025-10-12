@@ -20,13 +20,13 @@ export const MainLayoutAuth = ({
       <h1 className="font-codec w-full text-white uppercase text-2xl md:text-3xl lg:text-4xl xl:text-5xl lg:mt-10">
         {!mql.matches ? (
           <>
-            Единое школьное
-            <br /> информационное пространство
+            Зачетная книжка ученика <br /> профильного класса
+            <br /> школа 1298 «профиль куркино»
           </>
         ) : (
-          <>ЕШИП</>
+          <>Зачетная книжка 1298</>
         )}
-        <br /> школа 1298 «профиль куркино»
+        <br />
       </h1>
       <Separator className="my-1 bg-sch-green-light lg:hidden " />
       <div className="w-full max-w-md mt-5 lg:mt-40">{children}</div>

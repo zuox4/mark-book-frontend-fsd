@@ -1,8 +1,9 @@
 // stores/useAuthStore.ts
-import privateApi from "@/services/api/api";
+import privateApi, { publicApi } from "@/services/api/api";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
 export interface User {
   id: number;
   email: string;
@@ -21,10 +22,9 @@ interface AuthState {
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: (googleToken: string) => Promise<void>;
   refreshAuth: () => Promise<string | null>;
-
   logout: () => void;
-
   clearError: () => void;
   isVerifying: boolean;
   verifyError: string | null;
@@ -54,7 +54,8 @@ export const useAuthStore = create<AuthState>()(
             isVerifying: false,
             verifyError: null,
             user: response.data.user,
-            token: response.data.token,
+            token: response.data.access_token,
+            refreshToken: response.data.refresh_token,
             isAuthenticated: true,
           });
           toast.success("Email verified successfully!");
@@ -105,20 +106,47 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      loginWithGoogle: async (googleToken: string) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await publicApi.post("/auth/google", {
+            token: googleToken,
+          });
+          const {
+            user,
+            access_token: token,
+            refresh_token: refreshToken,
+          } = response.data;
+
+          set({
+            user,
+            token,
+            refreshToken,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+
+          toast.success("Успешная авторизация через Google");
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          const errorMessage =
+            error.response?.data?.detail || "Google authentication failed";
+          toast.error(errorMessage);
+          set({
+            isLoading: false,
+            error: errorMessage,
+          });
+          throw error;
+        }
+      },
+
       register: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
           const response = await privateApi.post("/auth/register", {
             email,
             password,
-          });
-          const { user, token } = response.data;
-
-          set({
-            user,
-            token,
-            isAuthenticated: true,
-            isLoading: false,
           });
           toast.success(response.data.message || "Registration successful");
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,6 +161,7 @@ export const useAuthStore = create<AuthState>()(
           throw error;
         }
       },
+
       refreshAuth: async () => {
         const { refreshToken } = get();
 
@@ -154,7 +183,7 @@ export const useAuthStore = create<AuthState>()(
           set({
             user,
             token,
-            refreshToken: newRefreshToken || refreshToken, // Используем новый если есть, иначе старый
+            refreshToken: newRefreshToken || refreshToken,
             isAuthenticated: true,
           });
 
@@ -164,7 +193,6 @@ export const useAuthStore = create<AuthState>()(
           const errorMessage =
             error.response?.data?.detail || "Token refresh failed";
           console.error(errorMessage);
-          // Если refresh не удался, разлогиниваем пользователя
           set({
             user: null,
             token: null,
@@ -176,6 +204,7 @@ export const useAuthStore = create<AuthState>()(
           throw error;
         }
       },
+
       logout: () => {
         set({
           user: null,
@@ -184,8 +213,6 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
           error: null,
         });
-
-        // toast.info("Logged out successfully");
       },
 
       clearError: () => set({ error: null }),
@@ -195,16 +222,14 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         token: state.token,
         user: state.user,
+        refreshToken: state.refreshToken,
       }),
       onRehydrateStorage: () => (state) => {
-        // Вызывается когда данные восстановлены из storage
         if (state) {
           state.isLoading = false;
-          // Также можно обновить isAuthenticated на основе токена
           state.isAuthenticated = !!state.token;
         }
       },
-
       version: 1,
     }
   )

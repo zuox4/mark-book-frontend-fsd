@@ -63,7 +63,7 @@ const ClassTeacherDashboard = () => {
     >
       <div className="text-white font-codec-news">
         <h1 className="text-2xl font-bold mb-6">
-          Журнал мероприятий - Классный руководитель
+          Журнал мероприятий - Проектный оффис
         </h1>
 
         {/* Фильтры */}

@@ -17,7 +17,7 @@ const ProjectLeaderPage = () => {
   ];
 
   return (
-    <div className="flex flex-col space-y-4 p-4">
+    <div className="flex flex-col space-y-4">
       {/* Селектор режима просмотра */}
       <div className="flex items-center space-x-3">
         <select
