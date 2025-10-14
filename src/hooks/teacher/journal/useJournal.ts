@@ -129,7 +129,7 @@ export const useUpdateResult = () => {
 
       return { previousJournal, variables };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousJournal) {
         queryClient.setQueryData(
           ["journal", context.variables.eventId, context.variables.groupId],
@@ -137,7 +137,7 @@ export const useUpdateResult = () => {
         );
       }
     },
-    onSettled: (data, error, variables) => {
+    onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["journal", variables.eventId, variables.groupId],
       });

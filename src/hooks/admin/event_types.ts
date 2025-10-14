@@ -80,7 +80,7 @@ export const useUpdateEventType = () => {
 
   return useMutation({
     mutationFn: updateEventType,
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       // Инвалидируем кэш списка типов мероприятий
       queryClient.invalidateQueries({ queryKey: ["event_types"] });
       // Также инвалидируем конкретный тип мероприятия если он кэширован отдельно
